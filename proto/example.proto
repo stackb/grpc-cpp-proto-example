@@ -1,0 +1,11 @@
+syntax="proto3";
+
+package proto;
+
+import "google/protobuf/empty.proto";
+
+message GreetRequest{}
+
+service Greeter{
+    rpc Greet(GreetRequest) returns (google.protobuf.Empty) {}
+}
