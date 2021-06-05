@@ -1,5 +1,6 @@
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@build_stack_rules_proto//rules:proto_compile.bzl", "proto_compile")
+load("@build_stack_rules_proto//rules:proto_plugin.bzl", "proto_plugin")
 
 proto_library(
     name = "example_proto",
@@ -13,7 +14,19 @@ proto_compile(
     outputs = [
         "example.pb.cc",
         "example.pb.h",
+        "example.grpc.pb.cc",
+        "example.grpc.pb.h",
     ],
-    plugins = ["@build_stack_rules_proto//plugin/builtin:cpp"],
+    plugins = [
+        "@build_stack_rules_proto//plugin/builtin:cpp",
+        ":grpc_cpp_plugin",
+    ],
     proto = "example_proto",
+)
+
+proto_plugin(
+    name = "grpc_cpp_plugin",
+    # replace your own tool here to eliminate dependency on com_github_grpc_grpc
+    tool = "@com_github_grpc_grpc//src/compiler:grpc_cpp_plugin",
+    visibility = ["//visibility:public"],
 )
